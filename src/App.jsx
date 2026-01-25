@@ -492,27 +492,27 @@ const App = () => {
 
       {/* Zoom Controls */}
       <div 
-        className="position-absolute start-0 m-3 d-flex flex-column gap-2" 
+        className="position-absolute start-0 m-3 d-flex flex-column gap-3" 
         style={{ 
             zIndex: 10, 
-            bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" 
+            bottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" // Increased margin to be safe
         }}
       >
         <button 
-            className="btn btn-white bg-white shadow rounded-circle d-flex align-items-center justify-content-center" 
-            style={{ width: "44px", height: "44px", padding: 0, color: "#1e3a8a" }}
+            className="btn btn-white bg-white shadow-lg rounded-circle d-flex align-items-center justify-content-center border-0" 
+            style={{ width: "48px", height: "44px", padding: 0, color: "#1e3a8a" }}
             onClick={handleZoomIn} 
             aria-label="Zoom In"
         >
-            <ZoomIn size={22} />
+            <ZoomIn size={24} />
         </button>
         <button 
-            className="btn btn-white bg-white shadow rounded-circle d-flex align-items-center justify-content-center" 
-            style={{ width: "44px", height: "44px", padding: 0, color: "#1e3a8a" }}
+            className="btn btn-white bg-white shadow-lg rounded-circle d-flex align-items-center justify-content-center border-0" 
+            style={{ width: "48px", height: "44px", padding: 0, color: "#1e3a8a" }}
             onClick={handleZoomOut} 
             aria-label="Zoom Out"
         >
-            <ZoomOut size={22} />
+            <ZoomOut size={24} />
         </button>
       </div>
 
@@ -530,7 +530,8 @@ const App = () => {
           style={{ 
             zIndex: 30, 
             width: width < 600 ? "100vw" : "350px", 
-            animation: "slideInRight 0.3s ease-out" 
+            animation: "slideInRight 0.3s ease-out",
+            paddingBottom: "env(safe-area-inset-bottom, 0px)" // Added safe area padding
           }}
         >
             <div className="p-4 pt-0">
