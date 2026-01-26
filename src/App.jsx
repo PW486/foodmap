@@ -44,24 +44,32 @@ const App = () => {
         
         setPosition(pos => {
           const newZoom = Math.min(Math.max(pos.zoom * factor, 0.5), 24);
-          
-          // Calculate zoom centered on mouse position
+          if (newZoom === pos.zoom) return pos;
+
           const container = document.getElementById("map-container");
           if (!container) return { ...pos, zoom: newZoom };
 
           const rect = container.getBoundingClientRect();
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
 
-          // Difference between mouse and current center in pixels
-          const dx = mouseX - rect.width / 2;
-          const dy = mouseY - rect.height / 2;
+          // Mercator projection scaling factor
+          const baseScale = width < 600 ? width / 6.5 : 150;
+          
+          // Distance from center in pixels
+          const dx = mouseX - centerX;
+          const dy = mouseY - centerY;
 
-          // Adjust coordinates: move center towards mouse when zooming in
-          // This is a simplified linear approximation for coordinates
-          const scaleChange = 1 - (1 / (newZoom / pos.zoom));
-          const newLong = pos.coordinates[0] + (dx * 0.2 / pos.zoom) * scaleChange;
-          const newLat = pos.coordinates[1] - (dy * 0.2 / pos.zoom) * scaleChange;
+          // Convert pixel displacement to geographic coordinate displacement
+          // In D3 Mercator, 1 degree lon approx = (baseScale * PI / 180) pixels
+          const pixelToDegree = (baseScale * Math.PI) / 180;
+          
+          // Calculate how much the center needs to move to keep the point under the mouse fixed
+          const diff = (1 / pos.zoom) - (1 / newZoom);
+          const newLong = pos.coordinates[0] + (dx / pixelToDegree) * diff;
+          const newLat = pos.coordinates[1] - (dy / pixelToDegree) * diff;
 
           return {
             coordinates: [newLong, newLat],
