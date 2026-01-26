@@ -43,7 +43,7 @@ const App = () => {
         const delta = -e.deltaY * zoomSpeed;
         setPosition(pos => ({
           ...pos,
-          zoom: Math.min(Math.max(pos.zoom + delta, 0.5), 8)
+          zoom: Math.min(Math.max(pos.zoom + delta, 0.5), 16)
         }));
       }
     };
