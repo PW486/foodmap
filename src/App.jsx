@@ -41,10 +41,33 @@ const App = () => {
         e.preventDefault();
         const zoomIntensity = 0.008;
         const factor = Math.exp(-e.deltaY * zoomIntensity);
-        setPosition(pos => ({
-          ...pos,
-          zoom: Math.min(Math.max(pos.zoom * factor, 0.5), 24)
-        }));
+        
+        setPosition(pos => {
+          const newZoom = Math.min(Math.max(pos.zoom * factor, 0.5), 24);
+          
+          // Calculate zoom centered on mouse position
+          const container = document.getElementById("map-container");
+          if (!container) return { ...pos, zoom: newZoom };
+
+          const rect = container.getBoundingClientRect();
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+
+          // Difference between mouse and current center in pixels
+          const dx = mouseX - rect.width / 2;
+          const dy = mouseY - rect.height / 2;
+
+          // Adjust coordinates: move center towards mouse when zooming in
+          // This is a simplified linear approximation for coordinates
+          const scaleChange = 1 - (1 / (newZoom / pos.zoom));
+          const newLong = pos.coordinates[0] + (dx * 0.2 / pos.zoom) * scaleChange;
+          const newLat = pos.coordinates[1] - (dy * 0.2 / pos.zoom) * scaleChange;
+
+          return {
+            coordinates: [newLong, newLat],
+            zoom: newZoom
+          };
+        });
       }
     };
 
