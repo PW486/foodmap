@@ -56,7 +56,7 @@ const App = () => {
   }, []);
 
   const handleZoomIn = () => {
-    if (position.zoom < 8) setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.5 }));
+    if (position.zoom < 16) setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.5 }));
   };
 
   const handleZoomOut = () => {
