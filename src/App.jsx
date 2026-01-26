@@ -39,7 +39,7 @@ const App = () => {
     const handleWheel = (e) => {
       if (e.ctrlKey) {
         e.preventDefault();
-        const zoomIntensity = 0.008;
+        const zoomIntensity = 0.01;
         const factor = Math.exp(-e.deltaY * zoomIntensity);
         
         setPosition(pos => {
