@@ -43,7 +43,7 @@ const App = () => {
         const factor = Math.exp(-e.deltaY * zoomIntensity);
         
         setPosition(pos => {
-          const newZoom = Math.min(Math.max(pos.zoom * factor, 0.5), 24);
+          const newZoom = Math.min(Math.max(pos.zoom * factor, 1), 24);
           if (newZoom === pos.zoom) return pos;
 
           const container = document.getElementById("map-container");
@@ -91,7 +91,7 @@ const App = () => {
   };
 
   const handleZoomOut = () => {
-    if (position.zoom > 0.5) setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.5 }));
+    if (position.zoom > 1) setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.5 }));
   };
 
   const handleMoveEnd = (newPosition) => setPosition(newPosition);
