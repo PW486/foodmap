@@ -39,11 +39,12 @@ const App = () => {
     const handleWheel = (e) => {
       if (e.ctrlKey) {
         e.preventDefault();
-        const zoomSpeed = 0.02;
-        const delta = -e.deltaY * zoomSpeed;
+        // Use a multiplier for consistent zoom speed at all levels
+        const zoomIntensity = 0.0015;
+        const factor = Math.exp(-e.deltaY * zoomIntensity);
         setPosition(pos => ({
           ...pos,
-          zoom: Math.min(Math.max(pos.zoom + delta, 0.5), 24)
+          zoom: Math.min(Math.max(pos.zoom * factor, 0.5), 24)
         }));
       }
     };
