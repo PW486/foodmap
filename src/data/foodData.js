@@ -204,7 +204,7 @@ export const foodData = {
   "Bermuda": bermuda,
   "Bhutan": bhutan,
   "Bolivia": bolivia,
-  "Bosnia and Herz.": bosnia,
+  "Bosnia and Herzegovina": bosnia,
   "Botswana": botswana,
   "Brazil": brazil,
   "Brunei": brunei,
