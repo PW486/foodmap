@@ -104,13 +104,17 @@ const App = () => {
     }
 
     // Update Safari status bar color (theme-color)
-    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (!metaThemeColor) {
-      metaThemeColor = document.createElement('meta');
-      metaThemeColor.setAttribute('name', 'theme-color');
-      document.head.appendChild(metaThemeColor);
+    const bgColor = darkMode ? "#1a1a1a" : "#f0f7ff";
+    let metaTags = document.querySelectorAll('meta[name="theme-color"]');
+    
+    if (metaTags.length === 0) {
+      const meta = document.createElement('meta');
+      meta.setAttribute('name', 'theme-color');
+      meta.setAttribute('content', bgColor);
+      document.head.appendChild(meta);
+    } else {
+      metaTags.forEach(tag => tag.setAttribute('content', bgColor));
     }
-    metaThemeColor.setAttribute('content', darkMode ? "#1a1a1a" : "#f0f7ff");
   }, [darkMode]);
 
   useEffect(() => {
