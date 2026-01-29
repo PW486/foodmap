@@ -31,7 +31,7 @@ const Sidebar = ({ selectedCountry, setSelectedCountry, width, darkMode }) => {
       className={`position-absolute top-0 end-0 h-100 overflow-auto sync-transition ${darkMode ? "text-white" : "text-dark"}`} 
       style={{ 
         zIndex: 30, 
-        width: width < 600 ? "100vw" : "350px", 
+        width: width < 600 ? "100vw" : "400px", 
         transform: selectedCountry ? "translateX(0)" : "translateX(100%)",
         paddingBottom: "env(safe-area-inset-bottom, 0px)",
         backgroundColor: darkMode ? "#121212" : "#f1f5f9",
