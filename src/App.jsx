@@ -164,7 +164,7 @@ const App = () => {
             height: "50px", 
             borderRadius: "15px", 
             backgroundColor: darkMode ? "#333333" : "white", 
-            color: darkMode ? "#FFD93D" : "#333333",
+            color: darkMode ? "#FFD93D" : "#3b82f6",
             border: "none",
             fontSize: "1.2rem",
             transition: "all 0.3s ease"
