@@ -47,6 +47,7 @@ const App = () => {
     if (saved !== null) return JSON.parse(saved);
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
+
   const { width, height } = useWindowSize();
   const isMobile = width < 600;
   const [position, setPosition] = useState({ 
@@ -66,7 +67,6 @@ const App = () => {
         }
       });
 
-    // Close search on click outside
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsSearchActive(false);
@@ -122,18 +122,10 @@ const App = () => {
           const mouseX = e.clientX - rect.left;
           const mouseY = e.clientY - rect.top;
 
-          // Mercator projection scaling factor
           const baseScale = width < 600 ? width / 6.5 : 150;
-          
-          // Distance from center in pixels
           const dx = mouseX - centerX;
           const dy = mouseY - centerY;
-
-          // Convert pixel displacement to geographic coordinate displacement
-          // In D3 Mercator, 1 degree lon approx = (baseScale * PI / 180) pixels
           const pixelToDegree = (baseScale * Math.PI) / 180;
-          
-          // Calculate how much the center needs to move to keep the point under the mouse fixed
           const diff = (1 / pos.zoom) - (1 / newZoom);
           const newLong = pos.coordinates[0] + (dx / pixelToDegree) * diff;
           const newLat = pos.coordinates[1] - (dy / pixelToDegree) * diff;
@@ -151,7 +143,7 @@ const App = () => {
     return () => {
       if (container) container.removeEventListener("wheel", handleWheel);
     };
-  }, []);
+  }, [width, height]);
 
   const handleZoomIn = () => {
     setIsSearchActive(false);
@@ -229,88 +221,93 @@ const App = () => {
 
       <Header darkMode={darkMode} />
 
-                  {/* Action Buttons - Left Bottom */}
-                  <div 
-                    ref={searchRef}
-                    className="position-absolute bottom-0 start-0 m-4 d-flex flex-column gap-2" 
-                    style={{ zIndex: 20 }}
-                  >                    {/* Random Country Button */}
-                    <button
-                      onClick={handleRandomCountry}
-                      className="btn shadow-sm d-flex align-items-center justify-content-center"
-                      style={{ 
-                        width: "50px", 
-                        height: "50px", 
-                        borderRadius: "15px", 
-                        backgroundColor: darkMode ? "#333333" : "white", 
-                        color: darkMode ? "#f0f0f0" : "#333333",
-                        border: "none",
-                        fontSize: "1.5rem",
-                        transition: "all 0.3s ease"
-                      }}
-                      title="Explore Random Cuisine"
-                    >
-                      🎲
-                    </button>
-      
-                                    {/* Search Bar & Results */}
-                                    <div className={`search-container ${isSearchActive ? "active" : ""}`}>
-                                      {/* Search Results Dropdown (Appears above input & dice) */}
-                                      {isSearchActive && searchResults.length > 0 && (
-                                        <div className="search-results">
-                                          {searchResults.map((country) => (
-                                            <div 
-                                              key={country} 
-                                              className="search-item"
-                                              onClick={() => handleCountrySelect(country)}
-                                            >
-                                              {country}
-                                            </div>
-                                          ))}
-                                        </div>
-                                      )}
-                            
-                                                <Search 
-                                                  size={22} 
-                                                  className="position-absolute" 
-                                                  style={{ 
-                                                    top: "14px", 
-                                                    left: "14px", 
-                                                    color: darkMode ? "#aaaaaa" : "#666666",
-                                                    cursor: "pointer",
-                                                    zIndex: 101
-                                                  }} 
-                                                  onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setIsSearchActive(!isSearchActive);
-                                                  }}
-                                                />                                      <input
-                                        ref={inputRef}
-                                        type="text"
-                                        className="search-input shadow-sm"
-                                        placeholder={isSearchActive ? "Search country..." : ""}
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        onFocus={() => setIsSearchActive(true)}
-                                        style={{ 
-                                          backgroundColor: darkMode ? "#333333" : "white",
-                                          color: darkMode ? "#f0f0f0" : "#333333"
-                                        }}
-                                      />                              {isSearchActive && searchQuery && (
-                                <X 
-                                  size={18} 
-                                  className="position-absolute" 
-                                  style={{ 
-                                    top: "16px", 
-                                    right: "15px", 
-                                    color: darkMode ? "#aaaaaa" : "#666666",
-                                    cursor: "pointer",
-                                    zIndex: 101
-                                  }} 
-                                  onClick={() => setSearchQuery("")}
-                                />
-                              )}
-                            </div>                  </div>      
+      {/* Action Buttons - Left Bottom */}
+      <div 
+        ref={searchRef}
+        className="position-absolute bottom-0 start-0 m-4 d-flex flex-column gap-2" 
+        style={{ zIndex: 20 }}
+      >
+        {/* Random Country Button */}
+        <button
+          onClick={handleRandomCountry}
+          className="btn shadow-sm d-flex align-items-center justify-content-center"
+          style={{ 
+            width: "50px", 
+            height: "50px", 
+            borderRadius: "15px", 
+            backgroundColor: darkMode ? "#333333" : "white", 
+            color: darkMode ? "#f0f0f0" : "#333333",
+            border: "none",
+            fontSize: "1.5rem",
+            transition: "all 0.3s ease"
+          }}
+          title="Explore Random Cuisine"
+        >
+          🎲
+        </button>
+
+        {/* Search Bar & Results */}
+        <div className={`search-container ${isSearchActive ? "active" : ""}`}>
+          {isSearchActive && searchResults.length > 0 && (
+            <div className="search-results">
+              {searchResults.map((country) => (
+                <div 
+                  key={country} 
+                  className="search-item"
+                  onClick={() => handleCountrySelect(country)}
+                >
+                  {country}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <Search 
+            size={22} 
+            className="position-absolute" 
+            style={{ 
+              top: "14px", 
+              left: "14px", 
+              color: darkMode ? "#aaaaaa" : "#666666",
+              cursor: "pointer",
+              zIndex: 101
+            }} 
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsSearchActive(!isSearchActive);
+            }}
+          />
+          <input
+            ref={inputRef}
+            type="text"
+            className="search-input shadow-sm"
+            placeholder={isSearchActive ? "Search country..." : ""}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => setIsSearchActive(true)}
+            style={{ 
+              backgroundColor: darkMode ? "#333333" : "white",
+              color: darkMode ? "#f0f0f0" : "#333333"
+            }}
+          />
+          {isSearchActive && searchQuery && (
+            <X 
+              size={18} 
+              className="position-absolute" 
+              style={{ 
+                top: "16px", 
+                right: "15px", 
+                color: darkMode ? "#aaaaaa" : "#666666",
+                cursor: "pointer",
+                zIndex: 101
+              }} 
+              onClick={() => setSearchQuery("")}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Action Buttons - Right Bottom */}
       <div 
         className="position-absolute bottom-0 end-0 m-4 d-flex flex-column gap-2 sync-transition" 
         style={{ 
