@@ -155,12 +155,16 @@ const App = () => {
 
   const handleZoomIn = () => {
     setIsSearchActive(false);
+    setIsAnimating(true);
     if (position.zoom < 128) setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.5 }));
+    setTimeout(() => setIsAnimating(false), 800);
   };
 
   const handleZoomOut = () => {
     setIsSearchActive(false);
+    setIsAnimating(true);
     if (position.zoom > 1) setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.5 }));
+    setTimeout(() => setIsAnimating(false), 800);
   };
 
   const handleMoveEnd = (newPosition) => setPosition(newPosition);
