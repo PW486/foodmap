@@ -199,6 +199,7 @@ const App = () => {
 
   const handleCountryClick = (geo, centroid) => {
     const countryName = mapGeoName(geo.properties.name);
+    setIsSearchActive(false);
 
     if (foodData[countryName]) {
       setSelectedCountry(countryName);
