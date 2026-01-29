@@ -228,7 +228,7 @@ const App = () => {
                   {/* Action Buttons - Left Bottom */}
                   <div 
                     ref={searchRef}
-                    className="position-absolute bottom-0 start-0 m-4 d-flex flex-column gap-2" 
+                    className="position-absolute bottom-0 start-0 m-4 d-flex flex-column gap-3" 
                     style={{ zIndex: 20 }}
                   >                    {/* Random Country Button */}
                     <button
@@ -307,7 +307,7 @@ const App = () => {
                                 />
                               )}
                             </div>                  </div>      
-      <div className="position-absolute bottom-0 end-0 m-4 d-flex flex-column gap-2" style={{ zIndex: 10 }}>
+      <div className="position-absolute bottom-0 end-0 m-4 d-flex flex-column gap-3" style={{ zIndex: 10 }}>
         <button
           onClick={() => {
             setDarkMode(!darkMode);

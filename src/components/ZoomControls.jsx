@@ -3,7 +3,7 @@ import { ZoomIn, ZoomOut } from "lucide-react";
 
 const ZoomControls = ({ onZoomIn, onZoomOut, darkMode }) => {
   return (
-    <div className="d-flex flex-column gap-2">
+    <div className="d-flex flex-column gap-3">
       <button 
           className="btn shadow-lg d-flex align-items-center justify-content-center border-0" 
           style={{ 
