@@ -96,15 +96,7 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
     
-    // Determine the background color
-    let bgColor;
-    if (isMobile && selectedCountry) {
-      bgColor = darkMode ? "#252525" : "#ffffff"; // Sidebar header color
-    } else {
-      bgColor = darkMode ? "#1a1a1a" : "#f0f7ff"; // App background color
-    }
-
-    // Apply colors to html, body and classes
+    // Apply dark-mode class to html and body
     const root = document.documentElement;
     if (darkMode) {
       root.classList.add("dark-mode");
@@ -113,22 +105,7 @@ const App = () => {
       root.classList.remove("dark-mode");
       document.body.classList.remove("dark-mode");
     }
-    
-    root.style.backgroundColor = bgColor;
-    document.body.style.backgroundColor = bgColor;
-
-    // Update Safari status bar color (theme-color) with a tiny delay
-    // This delay helps Safari recognize the background change after UI transitions
-    requestAnimationFrame(() => {
-      let metaThemeColor = document.querySelector('meta[name="theme-color"]');
-      if (!metaThemeColor) {
-        metaThemeColor = document.createElement('meta');
-        metaThemeColor.setAttribute('name', 'theme-color');
-        document.head.appendChild(metaThemeColor);
-      }
-      metaThemeColor.setAttribute('content', bgColor);
-    });
-  }, [darkMode, selectedCountry, isMobile]);
+  }, [darkMode]);
 
   useEffect(() => {
     const handleWheel = (e) => {
