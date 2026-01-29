@@ -6,6 +6,11 @@ const WikiFoodImage = ({ foodName, className }) => {
 
     useEffect(() => {
         let isMounted = true;
+        
+        // Reset state immediately when foodName changes
+        setImageUrl(null);
+        setLoading(true);
+
         const fetchImage = async () => {
             try {
                 const searchTerm = encodeURIComponent(foodName);
@@ -42,15 +47,23 @@ const WikiFoodImage = ({ foodName, className }) => {
     const displayUrl = imageUrl || `https://placehold.co/600x400?text=${encodeURIComponent(foodName)}`;
 
     return (
-        <img 
-            src={displayUrl} 
-            alt={foodName} 
-            className={className}
-            onError={(e) => {
-                e.target.onerror = null; 
-                e.target.src = `https://placehold.co/600x400?text=${encodeURIComponent(foodName)}`;
-            }}
-        />
+        <div className={className} style={{ backgroundColor: '#e2e8f0', position: 'relative', overflow: 'hidden' }}>
+            <img 
+                src={displayUrl} 
+                alt={foodName} 
+                className="w-100 h-100 object-fit-cover"
+                style={{ 
+                    opacity: loading ? 0 : 1, 
+                    transition: 'opacity 0.3s ease-in-out'
+                }}
+                onLoad={() => setLoading(false)}
+                onError={(e) => {
+                    e.target.onerror = null; 
+                    e.target.src = `https://placehold.co/600x400?text=${encodeURIComponent(foodName)}`;
+                    setLoading(false);
+                }}
+            />
+        </div>
     );
 };
 
