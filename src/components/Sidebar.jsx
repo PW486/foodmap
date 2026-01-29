@@ -30,13 +30,16 @@ const Sidebar = ({ selectedCountry, setSelectedCountry, width }) => {
   const countryColor = getCountryColor(displayCountry);
   const countryCode = getCountryCode(displayCountry);
 
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setSelectedCountry(null);
   };
 
   return (
     <div 
       ref={sidebarRef}
+      onClick={(e) => e.stopPropagation()}
       className="position-absolute top-0 end-0 h-100 bg-white shadow-lg overflow-auto" 
       style={{ 
         zIndex: 30, 
