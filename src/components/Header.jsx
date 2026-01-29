@@ -4,7 +4,7 @@ import logo from "../assets/logo.png";
 const Header = ({ darkMode }) => {
   return (
     <header 
-      className="position-absolute start-0 m-3 p-3 bg-white shadow rounded-4 d-flex align-items-center gap-3" 
+      className="position-absolute start-0 m-3 p-3 shadow rounded-4 d-flex align-items-center gap-3" 
       style={{ 
         zIndex: 10, 
         maxWidth: "400px",
