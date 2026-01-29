@@ -17,6 +17,7 @@ const ZoomControls = ({ onZoomIn, onZoomOut, darkMode }) => {
           }}
           onClick={onZoomIn} 
           aria-label="Zoom In"
+          title="Zoom In"
       >
           <ZoomIn size={24} />
       </button>
@@ -33,6 +34,7 @@ const ZoomControls = ({ onZoomIn, onZoomOut, darkMode }) => {
           }}
           onClick={onZoomOut} 
           aria-label="Zoom Out"
+          title="Zoom Out"
       >
           <ZoomOut size={24} />
       </button>
