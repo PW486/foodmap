@@ -47,7 +47,7 @@ const MapLayer = ({ width, height, position, handleMoveEnd, handleCountryClick, 
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
-                      onMouseEnter={() => !isMobile && setTooltipContent(geo.properties.name)}
+                      onMouseEnter={() => !isMobile && setTooltipContent(geoName)}
                       onMouseLeave={() => !isMobile && setTooltipContent(selectedCountry || "")}
                       onClick={() => {
                         const centroid = geoCentroid(geo);
