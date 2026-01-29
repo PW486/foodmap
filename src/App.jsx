@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Sun, Moon } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Sun, Moon, Search, X } from "lucide-react";
 import { geoCentroid } from "d3-geo";
 import { foodData } from "./data/foodData";
 import Header from "./components/Header";
@@ -36,6 +36,11 @@ const App = () => {
   const [tooltipContent, setTooltipContent] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
   const [geographies, setGeographies] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const searchRef = useRef(null);
+
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     if (saved !== null) return JSON.parse(saved);
@@ -52,7 +57,6 @@ const App = () => {
     fetch(GEO_URL)
       .then(response => response.json())
       .then(data => {
-        // world-atlas data structure conversion
         if (data.objects && data.objects.countries) {
           import("topojson-client").then(topojson => {
             const countries = topojson.feature(data, data.objects.countries).features;
@@ -60,7 +64,27 @@ const App = () => {
           });
         }
       });
+
+    // Close search on click outside
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchActive(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+    const filtered = Object.keys(foodData).filter(country =>
+      country.toLowerCase().includes(searchQuery.toLowerCase())
+    ).slice(0, 10);
+    setSearchResults(filtered);
+  }, [searchQuery]);
 
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
@@ -132,6 +156,25 @@ const App = () => {
 
   const handleMoveEnd = (newPosition) => setPosition(newPosition);
 
+  const handleCountrySelect = (countryName) => {
+    setSelectedCountry(countryName);
+    setIsSearchActive(false);
+    setSearchQuery("");
+
+    if (geographies.length > 0) {
+      const targetGeo = geographies.find(geo => mapGeoName(geo.properties.name) === countryName);
+      if (targetGeo) {
+        const centroid = geoCentroid(targetGeo);
+        setIsAnimating(true);
+        setPosition({
+          coordinates: centroid,
+          zoom: 4
+        });
+        setTimeout(() => setIsAnimating(false), 800);
+      }
+    }
+  };
+
   const handleCountryClick = (geo, centroid) => {
     const countryName = mapGeoName(geo.properties.name);
 
@@ -145,7 +188,8 @@ const App = () => {
         });
         setTimeout(() => setIsAnimating(false), 800);
       }
-    } else {
+    }
+  } else {
       setSelectedCountry(null);
     }
   };
@@ -153,21 +197,7 @@ const App = () => {
   const handleRandomCountry = () => {
     const countries = Object.keys(foodData);
     const randomCountryName = countries[Math.floor(Math.random() * countries.length)];
-    
-    setSelectedCountry(randomCountryName);
-
-    if (geographies.length > 0) {
-      const targetGeo = geographies.find(geo => mapGeoName(geo.properties.name) === randomCountryName);
-      if (targetGeo) {
-        const centroid = geoCentroid(targetGeo);
-        setIsAnimating(true);
-        setPosition({
-          coordinates: centroid,
-          zoom: 4
-        });
-        setTimeout(() => setIsAnimating(false), 800);
-      }
-    }
+    handleCountrySelect(randomCountryName);
   };
 
   return (
@@ -186,6 +216,65 @@ const App = () => {
       />
 
       <Header darkMode={darkMode} />
+
+      {/* Search Bar */}
+      <div 
+        ref={searchRef}
+        className="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" 
+        style={{ zIndex: 100 }}
+      >
+        <div className="search-container">
+          <Search 
+            size={20} 
+            className="position-absolute" 
+            style={{ 
+              top: "12px", 
+              left: "12px", 
+              color: darkMode ? "#aaaaaa" : "#666666",
+              pointerEvents: "none"
+            }} 
+          />
+          <input
+            type="text"
+            className={`search-input ${isSearchActive ? "active" : ""}`}
+            placeholder="Search country..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => setIsSearchActive(true)}
+            style={{ 
+              backgroundColor: darkMode ? "#333333" : "white",
+              color: darkMode ? "#f0f0f0" : "#333333"
+            }}
+          />
+          {isSearchActive && searchQuery && (
+            <X 
+              size={18} 
+              className="position-absolute" 
+              style={{ 
+                top: "13px", 
+                right: "12px", 
+                color: darkMode ? "#aaaaaa" : "#666666",
+                cursor: "pointer"
+              }} 
+              onClick={() => setSearchQuery("")}
+            />
+          )}
+        </div>
+        
+        {isSearchActive && searchResults.length > 0 && (
+          <div className="search-results">
+            {searchResults.map((country) => (
+              <div 
+                key={country} 
+                className="search-item"
+                onClick={() => handleCountrySelect(country)}
+              >
+                {country}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="position-absolute bottom-0 end-0 m-4 d-flex flex-column gap-2" style={{ zIndex: 10 }}>
         <button

@@ -53,3 +53,351 @@
 
 
 
+
+
+
+/* Search Bar Styles */
+
+
+
+.search-container {
+
+
+
+  position: relative;
+
+
+
+  transition: all 0.3s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.search-input {
+
+
+
+  border-radius: 15px;
+
+
+
+  padding: 10px 15px;
+
+
+
+  padding-left: 40px;
+
+
+
+  border: 1px solid #e2e8f0;
+
+
+
+  width: 44px;
+
+
+
+  background-color: white;
+
+
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+
+
+  cursor: pointer;
+
+
+
+  overflow: hidden;
+
+
+
+  white-space: nowrap;
+
+
+
+}
+
+
+
+
+
+
+
+.search-input:focus, .search-input.active {
+
+
+
+  width: 250px;
+
+
+
+  cursor: text;
+
+
+
+  outline: none;
+
+
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+
+
+}
+
+
+
+
+
+
+
+@media (max-width: 600px) {
+
+
+
+  .search-input:focus, .search-input.active {
+
+
+
+    width: 200px;
+
+
+
+  }
+
+
+
+}
+
+
+
+
+
+
+
+.search-results {
+
+
+
+  position: absolute;
+
+
+
+  top: 60px;
+
+
+
+  right: 0;
+
+
+
+  width: 250px;
+
+
+
+  max-height: 300px;
+
+
+
+  overflow-y: auto;
+
+
+
+  background: white;
+
+
+
+  border-radius: 15px;
+
+
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+
+
+  z-index: 100;
+
+
+
+  animation: slideInDown 0.2s ease-out;
+
+
+
+}
+
+
+
+
+
+
+
+@keyframes slideInDown {
+
+
+
+  from { opacity: 0; transform: translateY(-10px); }
+
+
+
+  to { opacity: 1; transform: translateY(0); }
+
+
+
+}
+
+
+
+
+
+
+
+.search-item {
+
+
+
+  padding: 12px 15px;
+
+
+
+  cursor: pointer;
+
+
+
+  transition: background 0.2s;
+
+
+
+  border-bottom: 1px solid #f1f5f9;
+
+
+
+}
+
+
+
+
+
+
+
+.search-item:last-child {
+
+
+
+  border-bottom: none;
+
+
+
+}
+
+
+
+
+
+
+
+.search-item:hover {
+
+
+
+  background-color: #f8fafc;
+
+
+
+}
+
+
+
+
+
+
+
+.dark-mode-app .search-input {
+
+
+
+  background-color: #333333;
+
+
+
+  color: #f0f0f0;
+
+
+
+  border-color: #444444;
+
+
+
+}
+
+
+
+
+
+
+
+.dark-mode-app .search-results {
+
+
+
+  background-color: #333333;
+
+
+
+  color: #f0f0f0;
+
+
+
+  border: 1px solid #444444;
+
+
+
+}
+
+
+
+
+
+
+
+.dark-mode-app .search-item {
+
+
+
+  border-bottom-color: #444444;
+
+
+
+}
+
+
+
+
+
+
+
+.dark-mode-app .search-item:hover {
+
+
+
+  background-color: #444444;
+
+
+
+}
+
+
+
+
+
+
+
+
