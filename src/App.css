@@ -73,7 +73,7 @@ html.dark-mode, body.dark-mode {
 }
 
 .search-container.active .search-input {
-  padding-left: 45px;
+  padding-left: 52px;
   padding-right: 15px;
   cursor: text;
   outline: none;
