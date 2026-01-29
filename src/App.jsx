@@ -214,107 +214,93 @@ const App = () => {
         darkMode={darkMode}
       />
 
-      <Header darkMode={darkMode} />
-
-      {/* Search Bar */}
-      <div 
-        ref={searchRef}
-        className="position-absolute top-0 end-0 m-3 d-flex flex-column align-items-end" 
-        style={{ zIndex: 100 }}
-      >
-        <div className="search-container">
-          <Search 
-            size={20} 
-            className="position-absolute" 
-            style={{ 
-              top: "12px", 
-              left: "12px", 
-              color: darkMode ? "#aaaaaa" : "#666666",
-              pointerEvents: "none"
-            }} 
-          />
-          <input
-            type="text"
-            className={`search-input ${isSearchActive ? "active" : ""}`}
-            placeholder="Search country..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => setIsSearchActive(true)}
-            style={{ 
-              backgroundColor: darkMode ? "#333333" : "white",
-              color: darkMode ? "#f0f0f0" : "#333333"
-            }}
-          />
-          {isSearchActive && searchQuery && (
-            <X 
-              size={18} 
-              className="position-absolute" 
-              style={{ 
-                top: "13px", 
-                right: "12px", 
-                color: darkMode ? "#aaaaaa" : "#666666",
-                cursor: "pointer"
-              }} 
-              onClick={() => setSearchQuery("")}
-            />
-          )}
-        </div>
-        
-        {isSearchActive && searchResults.length > 0 && (
-          <div className="search-results">
-            {searchResults.map((country) => (
-              <div 
-                key={country} 
-                className="search-item"
-                onClick={() => handleCountrySelect(country)}
-              >
-                {country}
+            <Header darkMode={darkMode} />
+      
+            {/* Action Buttons - Left Bottom */}
+            <div 
+              ref={searchRef}
+              className="position-absolute bottom-0 start-0 m-4 d-flex flex-column gap-2" 
+              style={{ zIndex: 100 }}
+            >
+              {/* Search Results Dropdown (Appears above input) */}
+              {isSearchActive && searchResults.length > 0 && (
+                <div className="search-results">
+                  {searchResults.map((country) => (
+                    <div 
+                      key={country} 
+                      className="search-item"
+                      onClick={() => handleCountrySelect(country)}
+                    >
+                      {country}
+                    </div>
+                  ))}
+                </div>
+              )}
+      
+              {/* Search Bar */}
+              <div className="search-container">
+                <Search 
+                  size={22} 
+                  className="position-absolute" 
+                  style={{ 
+                    top: "14px", 
+                    left: "14px", 
+                    color: darkMode ? "#aaaaaa" : "#666666",
+                    pointerEvents: "none",
+                    zIndex: 101
+                  }} 
+                />
+                <input
+                  type="text"
+                  className={`search-input shadow-sm ${isSearchActive ? "active" : ""}`}
+                  placeholder={isSearchActive ? "Search country..." : ""}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setIsSearchActive(true)}
+                  style={{ 
+                    backgroundColor: darkMode ? "#333333" : "white",
+                    color: darkMode ? "#f0f0f0" : "#333333"
+                  }}
+                />
+                {isSearchActive && searchQuery && (
+                  <X 
+                    size={18} 
+                    className="position-absolute" 
+                    style={{ 
+                      top: "16px", 
+                      right: "15px", 
+                      color: darkMode ? "#aaaaaa" : "#666666",
+                      cursor: "pointer",
+                      zIndex: 101
+                    }} 
+                    onClick={() => setSearchQuery("")}
+                  />
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="position-absolute bottom-0 end-0 m-4 d-flex flex-column gap-2" style={{ zIndex: 10 }}>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="btn shadow-sm d-flex align-items-center justify-content-center"
-          style={{ 
-            width: "50px", 
-            height: "50px", 
-            borderRadius: "15px", 
-            backgroundColor: darkMode ? "#333333" : "white", 
-            color: darkMode ? "#FFD93D" : "#3b82f6",
-            border: "none",
-            fontSize: "1.2rem",
-            transition: "all 0.3s ease"
-          }}
-          title={darkMode ? "Light Mode" : "Dark Mode"}
-        >
-          {darkMode ? <Sun size={24} /> : <Moon size={24} />}
-        </button>
-        <ZoomControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} darkMode={darkMode} />
-      </div>
-
-      <button
-        onClick={handleRandomCountry}
-        className="position-absolute bottom-0 start-0 m-4 btn shadow-sm d-flex align-items-center justify-content-center"
-        style={{ 
-          zIndex: 10, 
-          width: "50px", 
-          height: "50px", 
-          borderRadius: "15px", 
-          backgroundColor: darkMode ? "#333333" : "white", 
-          color: darkMode ? "#f0f0f0" : "#333333",
-          border: "none",
-          fontSize: "1.5rem",
-          transition: "all 0.3s ease"
-        }}
-        title="Explore Random Cuisine"
-      >
-        🎲
-      </button>
-
+      
+              {/* Random Country Button */}
+              <button
+                onClick={handleRandomCountry}
+                className="btn shadow-sm d-flex align-items-center justify-content-center"
+                style={{ 
+                  width: "50px", 
+                  height: "50px", 
+                  borderRadius: "15px", 
+                  backgroundColor: darkMode ? "#333333" : "white", 
+                  color: darkMode ? "#f0f0f0" : "#333333",
+                  border: "none",
+                  fontSize: "1.5rem",
+                  transition: "all 0.3s ease"
+                }}
+                title="Explore Random Cuisine"
+              >
+                🎲
+              </button>
+            </div>
+      
+            <div className="position-absolute bottom-0 end-0 m-4 d-flex flex-column gap-2" style={{ zIndex: 10 }}>
+      
+      
       {!isMobile && tooltipContent && (
         <div className="position-absolute top-0 start-50 translate-middle-x mt-3 text-white px-3 py-1 rounded-pill shadow-sm opacity-90" style={{ zIndex: 20, backgroundColor: darkMode ? "#444444" : "#333333", pointerEvents: "none" }}>
             {tooltipContent}
