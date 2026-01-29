@@ -183,7 +183,7 @@ const App = () => {
           coordinates: centroid,
           zoom: 4
         });
-        setTimeout(() => setAnimationMode(null), 400);
+        setTimeout(() => setAnimationMode(null), 500);
       }
     }
   };
@@ -199,7 +199,7 @@ const App = () => {
           coordinates: centroid,
           zoom: 4
         });
-        setTimeout(() => setAnimationMode(null), 400);
+        setTimeout(() => setAnimationMode(null), 500);
       }
     } else {
       setSelectedCountry(null);
