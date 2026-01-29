@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Sun, Moon } from "lucide-react";
+import { geoCentroid } from "d3-geo";
 import { foodData } from "./data/foodData";
 import Header from "./components/Header";
 import ZoomControls from "./components/ZoomControls";
@@ -7,6 +8,8 @@ import Sidebar from "./components/Sidebar";
 import MapLayer from "./components/MapLayer";
 import { mapGeoName } from "./utils/countryMapping";
 import "./App.css";
+
+const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json";
 
 function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
@@ -32,6 +35,7 @@ const App = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [tooltipContent, setTooltipContent] = useState("");
   const [isAnimating, setIsAnimating] = useState(false);
+  const [geographies, setGeographies] = useState([]);
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     if (saved !== null) return JSON.parse(saved);
@@ -43,6 +47,20 @@ const App = () => {
     coordinates: isMobile ? [15, 35] : [15, 15], 
     zoom: isMobile ? 4 : 2 
   });
+
+  useEffect(() => {
+    fetch(GEO_URL)
+      .then(response => response.json())
+      .then(data => {
+        // world-atlas data structure conversion
+        if (data.objects && data.objects.countries) {
+          import("topojson-client").then(topojson => {
+            const countries = topojson.feature(data, data.objects.countries).features;
+            setGeographies(countries);
+          });
+        }
+      });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
@@ -134,8 +152,22 @@ const App = () => {
 
   const handleRandomCountry = () => {
     const countries = Object.keys(foodData);
-    const randomCountry = countries[0] === "USA" ? countries[Math.floor(Math.random() * countries.length)] : countries[Math.floor(Math.random() * countries.length)]; // Random selection
-    setSelectedCountry(randomCountry);
+    const randomCountryName = countries[Math.floor(Math.random() * countries.length)];
+    
+    setSelectedCountry(randomCountryName);
+
+    if (geographies.length > 0) {
+      const targetGeo = geographies.find(geo => mapGeoName(geo.properties.name) === randomCountryName);
+      if (targetGeo) {
+        const centroid = geoCentroid(targetGeo);
+        setIsAnimating(true);
+        setPosition({
+          coordinates: centroid,
+          zoom: 4
+        });
+        setTimeout(() => setIsAnimating(false), 800);
+      }
+    }
   };
 
   return (
