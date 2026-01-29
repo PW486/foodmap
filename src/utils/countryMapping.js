@@ -1,7 +1,6 @@
 // Centralized name mapping: GeoJSON names -> Our Data Keys
 export const geoNameMap = {
     "United States of America": "United States",
-    "United States": "United States",
     "United Arab Emirates": "UAE",
     "Czech Republic": "Czechia",
     "Russian Federation": "Russia",
