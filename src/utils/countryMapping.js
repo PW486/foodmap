@@ -21,8 +21,8 @@ export const geoNameMap = {
     "Congo": "Congo",
     "Republic of the Congo": "Congo",
     "Brunei Darussalam": "Brunei",
-    "Central African Rep.": "CAR",
-    "Central African Republic": "CAR",
+    "Central African Rep.": "Central African Republic",
+    "Central African Republic": "Central African Republic",
     "Eq. Guinea": "Equatorial Guinea",
     "S. Sudan": "South Sudan",
     "South Sudan": "South Sudan",
@@ -40,7 +40,7 @@ export const geoNameMap = {
     "Bahrain": "Bahrain",
     "Belize": "Belize",
     "N. Cyprus": "Northern Cyprus",
-    "Papua New Guinea": "PNG"
+    "Papua New Guinea": "Papua New Guinea"
 };
 
 export const mapGeoName = (name) => geoNameMap[name] || name;
@@ -52,7 +52,7 @@ export const countryCodeMapping = {
     "Bangladesh": "bd", "Belarus": "by", "Belgium": "be", "Belize": "bz", "Benin": "bj", "Bermuda": "bm", "Bhutan": "bt",
     "Bolivia": "bo", "Bosnia and Herz.": "ba", "Botswana": "bw", "Brazil": "br", "Brunei": "bn", "Bulgaria": "bg",
     "Burkina Faso": "bf", "Burundi": "bi", "Cambodia": "kh", "Cameroon": "cm", "Canada": "ca", "Cape Verde": "cv",
-    "CAR": "cf", "Chad": "td", "Chile": "cl", "China": "cn", "Colombia": "co", "Comoros": "km",
+    "Central African Republic": "cf", "Chad": "td", "Chile": "cl", "China": "cn", "Colombia": "co", "Comoros": "km",
     "Congo": "cg", "Costa Rica": "cr", "Croatia": "hr", "Cuba": "cu", "Cyprus": "cy", "Czechia": "cz",
     "Denmark": "dk", "Djibouti": "dj", "Dominican Republic": "do", "DRC": "cd",
     "East Timor": "tl", "Ecuador": "ec", "Egypt": "eg", "El Salvador": "sv", "Equatorial Guinea": "gq",
@@ -69,7 +69,7 @@ export const countryCodeMapping = {
     "Montenegro": "me", "Morocco": "ma", "Mozambique": "mz", "Myanmar": "mm", "Namibia": "na", "Nepal": "np",
     "Netherlands": "nl", "New Zealand": "nz", "Nicaragua": "ni", "Niger": "ne", "Nigeria": "ng", "North Korea": "kp",
     "North Macedonia": "mk", "Northern Cyprus": "cy", "Norway": "no", "Oman": "om", "Pakistan": "pk",
-    "Palestine": "ps", "Panama": "pa", "PNG": "pg", "Paraguay": "py", "Peru": "pe", "Philippines": "ph",
+    "Palestine": "ps", "Panama": "pa", "Papua New Guinea": "pg", "Paraguay": "py", "Peru": "pe", "Philippines": "ph",
     "Poland": "pl", "Portugal": "pt", "Puerto Rico": "pr", "Qatar": "qa", "Romania": "ro", "Russia": "ru",
     "Rwanda": "rw", "Sao Tome and Principe": "st", "Saudi Arabia": "sa", "Senegal": "sn", "Serbia": "rs",
     "Seychelles": "sc", "Sierra Leone": "sl", "Singapore": "sg", "Slovakia": "sk", "Slovenia": "si",
@@ -96,7 +96,7 @@ export const countryColorMapping = {
     "Bangladesh": ORANGE, "Belarus": PURPLE, "Belgium": BLUE, "Belize": GREEN, "Benin": PINK, "Bermuda": ORANGE, "Bhutan": BLUE,
     "Bolivia": YELLOW, "Bosnia and Herz.": GREEN, "Botswana": YELLOW, "Brazil": GREEN, "Brunei": YELLOW, "Bulgaria": PURPLE,
     "Burkina Faso": GREEN, "Burundi": BLUE, "Cambodia": PURPLE, "Cameroon": YELLOW, "Canada": PURPLE, "Cape Verde": ORANGE,
-    "CAR": GREEN, "Chad": PURPLE, "Chile": PURPLE, "China": ORANGE, "Colombia": PURPLE, "Comoros": YELLOW,
+    "Central African Republic": GREEN, "Chad": PURPLE, "Chile": PURPLE, "China": ORANGE, "Colombia": PURPLE, "Comoros": YELLOW,
     "Congo": ORANGE, "Costa Rica": PINK, "Croatia": PINK, "Cuba": PINK, "Cyprus": BLUE, "Czechia": PINK,
     "Denmark": BLUE, "Djibouti": ORANGE, "Dominican Republic": BLUE, "DRC": PURPLE,
     "East Timor": BLUE, "Ecuador": ORANGE, "Egypt": PURPLE, "El Salvador": BLUE, "Equatorial Guinea": BLUE,
@@ -113,7 +113,7 @@ export const countryColorMapping = {
     "Montenegro": YELLOW, "Morocco": BLUE, "Mozambique": PURPLE, "Myanmar": PINK, "Namibia": BLUE, "Nepal": PINK,
     "Netherlands": GREEN, "New Zealand": GREEN, "Nicaragua": ORANGE, "Niger": BLUE, "Nigeria": GREEN, "North Korea": YELLOW,
     "North Macedonia": GREEN, "Northern Cyprus": YELLOW, "Norway": PINK, "Oman": YELLOW, "Pakistan": YELLOW,
-    "Palestine": GREEN, "Panama": YELLOW, "PNG": PURPLE, "Paraguay": ORANGE, "Peru": BLUE, "Philippines": YELLOW,
+    "Palestine": GREEN, "Panama": YELLOW, "Papua New Guinea": PURPLE, "Paraguay": ORANGE, "Peru": BLUE, "Philippines": YELLOW,
     "Poland": YELLOW, "Portugal": GREEN, "Puerto Rico": PURPLE, "Qatar": PINK, "Romania": BLUE, "Russia": BLUE,
     "Rwanda": GREEN, "Sao Tome and Principe": BLUE, "Saudi Arabia": ORANGE, "Senegal": YELLOW, "Serbia": ORANGE,
     "Seychelles": ORANGE, "Sierra Leone": PURPLE, "Singapore": PURPLE, "Slovakia": PURPLE, "Slovenia": PURPLE,
