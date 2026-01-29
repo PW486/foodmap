@@ -96,34 +96,30 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
     
-    // Update body class
+    // Determine the background color
+    let bgColor;
+    if (isMobile && selectedCountry) {
+      bgColor = darkMode ? "#252525" : "#ffffff"; // Sidebar header color
+    } else {
+      bgColor = darkMode ? "#1a1a1a" : "#f0f7ff"; // App background color
+    }
+
+    // Apply colors to body and class
     if (darkMode) {
       document.body.classList.add("dark-mode");
     } else {
       document.body.classList.remove("dark-mode");
     }
+    document.body.style.backgroundColor = bgColor;
 
     // Update Safari status bar color (theme-color)
-    // On mobile, if sidebar is open, match sidebar header color. Otherwise match app background.
-    let bgColor;
-    if (isMobile && selectedCountry) {
-      bgColor = darkMode ? "#252525" : "#ffffff";
-    } else {
-      bgColor = darkMode ? "#1a1a1a" : "#f0f7ff";
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.setAttribute('name', 'theme-color');
+      document.head.appendChild(metaThemeColor);
     }
-
-    let metaTags = document.querySelectorAll('meta[name="theme-color"]');
-    
-    if (metaTags.length === 0) {
-      const meta = document.createElement('meta');
-      meta.setAttribute('name', 'theme-color');
-      meta.setAttribute('content', bgColor);
-      document.head.appendChild(meta);
-    } else {
-      metaTags.forEach(tag => {
-        tag.setAttribute('content', bgColor);
-      });
-    }
+    metaThemeColor.setAttribute('content', bgColor);
   }, [darkMode, selectedCountry, isMobile]);
 
   useEffect(() => {
