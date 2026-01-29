@@ -190,7 +190,7 @@ const App = () => {
           fontSize: "1.5rem",
           transition: "all 0.3s ease"
         }}
-        title="Random Country"
+        title="Explore Random Cuisine"
       >
         🎲
       </button>
