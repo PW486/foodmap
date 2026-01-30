@@ -266,7 +266,10 @@ const App = () => {
         </button>
 
         {/* Search Bar & Results */}
-        <div className={`search-container ${isSearchActive ? "active" : ""}`}>
+        <div 
+          className={`search-container ${isSearchActive ? "active" : ""}`}
+          title={isSearchActive ? "" : "Search"}
+        >
           {isSearchActive && searchResults.length > 0 && (
             <div className="search-results">
               {searchResults.map((country) => (
