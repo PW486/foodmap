@@ -322,7 +322,7 @@ const App = () => {
           {isSearchActive && searchQuery && (
             <div 
               className="position-absolute d-flex align-items-center justify-content-center"
-              title="Clear search"
+              title="Clear Input"
               style={{ 
                 top: 0, 
                 right: 0, 
