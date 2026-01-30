@@ -66,7 +66,12 @@ const Sidebar = ({ selectedCountry, setSelectedCountry, width, darkMode }) => {
               <span>{displayCountry}</span>
               <span> Cuisine</span>
             </h2>
-            <button onClick={handleClose} className={`btn ${darkMode ? "btn-close btn-close-white" : "btn-close"} ms-3 flex-shrink-0`} style={{ marginTop: "4px" }}></button>
+            <button 
+              onClick={handleClose} 
+              className={`btn ${darkMode ? "btn-close btn-close-white" : "btn-close"} ms-3 flex-shrink-0`} 
+              style={{ marginTop: "4px" }}
+              title="Close"
+            ></button>
           </div>
         </div>
         

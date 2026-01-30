@@ -284,6 +284,7 @@ const App = () => {
           <Search 
             size={22} 
             className="position-absolute" 
+            title="Search"
             style={{ 
               top: "14px", 
               left: "14px", 
@@ -313,6 +314,7 @@ const App = () => {
             <X 
               size={18} 
               className="position-absolute" 
+              title="Clear search"
               style={{ 
                 top: "16px", 
                 right: "15px", 
