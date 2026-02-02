@@ -192,13 +192,24 @@ const MapLayer = ({
                     const centroid = centroids[geoName];
                     if (!centroid) return null;
                     
-                    return (
-                      <Marker key={`${geo.rsmKey}-label`} coordinates={centroid}>
-                        <text
-                          dy="0.33em"
-                          fontSize={labelFontSize}
-                          textAnchor="middle"
-                          onMouseEnter={() => !isMobile && setHoveredCountry(geoName)}
+                                      return (
+                                        <Marker key={`${geo.rsmKey}-label`} coordinates={centroid}>
+                                          {/* Expanded Hit Area for Mobile */}
+                                          {isMobile && (
+                                            <circle
+                                              r={labelFontSize * 2.5}
+                                              fill="transparent"
+                                              style={{ cursor: "pointer", pointerEvents: "auto" }}
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleCountryClick(geo, centroid);
+                                              }}
+                                            />
+                                          )}
+                                          <text
+                                            dy="0.33em"
+                                            fontSize={labelFontSize}
+                                            textAnchor="middle"                          onMouseEnter={() => !isMobile && setHoveredCountry(geoName)}
                           onMouseLeave={() => !isMobile && setHoveredCountry(null)}
                           onClick={(e) => {
                             e.stopPropagation();

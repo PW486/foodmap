@@ -189,7 +189,9 @@ const App = () => {
   const calculateTargetZoom = (countryName) => {
     const baseMinZoom = LABEL_MIN_ZOOM[countryName] || 4.5;
     if (isMobile) {
-      const offset = baseMinZoom <= 1.5 ? 4.0 : 7.0;
+      // For very small countries (Tier 5+), zoom in significantly more
+      const additionalZoom = baseMinZoom > 5.5 ? 12.0 : 7.0;
+      const offset = baseMinZoom <= 1.5 ? 4.0 : additionalZoom;
       return Math.max(baseMinZoom + offset, 9.0);
     }
     return Math.max(baseMinZoom + 3.0, 5.0);
