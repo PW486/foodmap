@@ -98,8 +98,74 @@ const App = () => {
     document.body.classList.toggle("dark-mode", darkMode);
   }, [darkMode]);
 
-  // Desktop Scroll Zoom
+  // One-handed zoom refs
+  const lastTapTimeRef = useRef(0);
+  const lastTapPosRef = useRef({ x: 0, y: 0 });
+  const isOneHandZoomModeRef = useRef(false);
+  const touchStartYRef = useRef(0);
+  const initialZoomRef = useRef(1);
+  const currentZoomRef = useRef(1);
+
+  // Sync ref with state
   useEffect(() => {
+    currentZoomRef.current = position.zoom;
+  }, [position.zoom]);
+
+  // Desktop & Mobile Zoom/Move Handlers
+  useEffect(() => {
+    const container = document.getElementById("map-container");
+    if (!container) return;
+
+    const handleTouchStart = (e) => {
+      if (e.touches.length !== 1) {
+        isOneHandZoomModeRef.current = false;
+        return;
+      }
+
+      const now = Date.now();
+      const touch = e.touches[0];
+      const deltaT = now - lastTapTimeRef.current;
+      
+      const dx = touch.clientX - lastTapPosRef.current.x;
+      const dy = touch.clientY - lastTapPosRef.current.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      if (deltaT > 0 && deltaT < 300 && dist < 40) {
+        isOneHandZoomModeRef.current = true;
+        touchStartYRef.current = touch.clientY;
+        initialZoomRef.current = currentZoomRef.current;
+        
+        // Block browser/map defaults
+        if (e.cancelable) e.preventDefault();
+      }
+      
+      lastTapTimeRef.current = now;
+      lastTapPosRef.current = { x: touch.clientX, y: touch.clientY };
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isOneHandZoomModeRef.current || e.touches.length !== 1) return;
+
+      const touch = e.touches[0];
+      const deltaY = touch.clientY - touchStartYRef.current;
+      
+      // DOWN to zoom IN (deltaY > 0), UP to zoom OUT (deltaY < 0)
+      // Double the zoom for every 150px moved
+      const factor = Math.pow(2, deltaY / 150);
+      const nextZoom = Math.min(Math.max(initialZoomRef.current * factor, 1), 128);
+      
+      setPosition(pos => ({ ...pos, zoom: nextZoom }));
+
+      if (e.cancelable) e.preventDefault();
+    };
+
+    const handleTouchEnd = (e) => {
+      if (isOneHandZoomModeRef.current) {
+        if (e.cancelable) e.preventDefault();
+      }
+      isOneHandZoomModeRef.current = false;
+    };
+
     const handleWheel = (e) => {
       if (!e.ctrlKey) return;
       e.preventDefault();
@@ -108,9 +174,6 @@ const App = () => {
       setPosition(pos => {
         const newZoom = Math.min(Math.max(pos.zoom * factor, 1), 128);
         if (newZoom === pos.zoom) return pos;
-
-        const container = document.getElementById("map-container");
-        if (!container) return { ...pos, zoom: newZoom };
 
         const rect = container.getBoundingClientRect();
         const dx = (e.clientX - rect.left) - rect.width / 2;
@@ -124,10 +187,20 @@ const App = () => {
         };
       });
     };
-    const container = document.getElementById("map-container");
-    container?.addEventListener("wheel", handleWheel, { passive: false });
-    return () => container?.removeEventListener("wheel", handleWheel);
-  }, [width, height, isMobile]);
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+    // Use capture phase (true) to ensure our listeners fire before the map's internal ones
+    container.addEventListener("touchstart", handleTouchStart, { passive: false, capture: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false, capture: true });
+    container.addEventListener("touchend", handleTouchEnd, { capture: true });
+
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+      container.removeEventListener("touchstart", handleTouchStart, true);
+      container.removeEventListener("touchmove", handleTouchMove, true);
+      container.removeEventListener("touchend", handleTouchEnd, true);
+    };
+  }, [width, height, isMobile]); // Removed position.zoom from dependencies!
 
   const handleZoomIn = () => {
     setAnimationMode("fast");
