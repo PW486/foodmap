@@ -67,7 +67,6 @@ const MapLayer = ({
     fill: theme.TEXT,
     paintOrder: "stroke",
     stroke: darkMode ? "#000000" : "#ffffff",
-    strokeWidth: labelFontSize / 5,
     strokeLinecap: "round",
     strokeLinejoin: "round",
     pointerEvents: "auto",
@@ -143,38 +142,47 @@ const MapLayer = ({
                             onClick={(e) => (e.stopPropagation(), handleCountryClick(geo, centroid))}
                           />
                         )}
-                        <text
-                          fontSize={labelFontSize}
-                          textAnchor="middle"
-                          dominantBaseline="central"
-                          onMouseEnter={() => !isMobile && (setTooltipContent(name), setHoveredCountry(name))}
-                          onMouseLeave={() => !isMobile && (setTooltipContent(""), setHoveredCountry(null))}
-                          onClick={(e) => (e.stopPropagation(), handleCountryClick(geo, centroid))}
-                          style={labelStyle}
-                        >
-                          {(() => {
-                            const words = name.split(" ");
-                            const isMultiLine = words.length > 1 && (name.length > 15 || words.length > 2);
-                            
-                            if (!isMultiLine) {
-                              return <tspan x="0" y="0">{name}</tspan>;
-                            }
+                        {(() => {
+                          const words = name.split(" ");
+                          const isMultiLine = words.length > 1 && (name.length > 15 || words.length > 2);
+                          
+                          // Safari (especially iOS) has a bug where tiny font sizes in SVG cause 
+                          // erratic line-spacing behavior. We fix this by using a larger 
+                          // virtual font size and scaling it down via transform.
+                          const virtualFontSize = 10;
+                          const textScale = labelFontSize / virtualFontSize;
 
-                            const lineHeight = labelFontSize * 1.0;
-                            const totalHeight = (words.length - 1) * lineHeight;
-                            const startY = -totalHeight / 2;
-
-                            return words.map((word, i) => (
-                              <tspan 
-                                key={i} 
-                                x="0" 
-                                y={startY + (i * lineHeight)}
-                              >
-                                {word}
-                              </tspan>
-                            ));
-                          })()}
-                        </text>
+                          return (
+                            <text
+                              fontSize={virtualFontSize}
+                              textAnchor="middle"
+                              dominantBaseline="central"
+                              transform={`scale(${textScale})`}
+                              onMouseEnter={() => !isMobile && (setTooltipContent(name), setHoveredCountry(name))}
+                              onMouseLeave={() => !isMobile && (setTooltipContent(""), setHoveredCountry(null))}
+                              onClick={(e) => (e.stopPropagation(), handleCountryClick(geo, centroid))}
+                              style={{ 
+                                ...labelStyle, 
+                                fontSize: virtualFontSize, 
+                                strokeWidth: 2 // 2 * textScale results in (labelFontSize / 5)
+                              }}
+                            >
+                              {isMultiLine ? (
+                                words.map((word, i) => (
+                                  <tspan 
+                                    key={i} 
+                                    x="0" 
+                                    y={(i - (words.length - 1) / 2) * 11} // 1.1em relative to virtualFontSize
+                                  >
+                                    {word}
+                                  </tspan>
+                                ))
+                              ) : (
+                                <tspan x="0" y="0">{name}</tspan>
+                              )}
+                            </text>
+                          );
+                        })()}
                       </Marker>
                     );
                   })}
